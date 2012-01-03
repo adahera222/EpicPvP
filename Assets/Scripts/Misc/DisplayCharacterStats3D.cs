@@ -5,7 +5,7 @@ public class DisplayCharacterStats3D : MonoBehaviour {
 	
 	public Transform worldCamera;
 	public Transform statusPlate;
-	public Vector2 statusPlateOffset;
+	public Vector3 statusPlateOffset;
 	
 	// Use this for initialization
 	void Start () {
@@ -14,9 +14,10 @@ public class DisplayCharacterStats3D : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		/*
-		Vector3 position = Camera.mainCamera.WorldToViewportPoint(transform.position);
+		Vector3 position = Camera.mainCamera.WorldToViewportPoint(worldCamera.position);
 		position.x -= statusPlateOffset.x;
 		position.y -= statusPlateOffset.y;
+		position.z -= statusPlateOffset.z;
 		statusPlate.transform.position = position;
 		*/
 		

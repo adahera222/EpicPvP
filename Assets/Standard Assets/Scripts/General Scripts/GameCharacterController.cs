@@ -15,6 +15,8 @@ public class GameCharacterController : MonoBehaviour {
 	
 	public string characterName;
 	
+	GameObject selectedObject;
+	
 	// First function that is called when a scene is loaded
 	void Awake()
 	{
@@ -26,9 +28,8 @@ public class GameCharacterController : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 		currViewChange = transform.forward;	
 		spinBodyBy = 0;
-		
-		GameObject obj = GameObject.Find("DisplayStats/PlayersName");
-		TextMesh mesh = obj.GetComponent<TextMesh>();
+	
+		TextMesh mesh = transform.Find("DisplayStats/ObjectsName").GetComponent<TextMesh>();
 		mesh.text = characterName;		
 	}
 	
@@ -83,8 +84,12 @@ public class GameCharacterController : MonoBehaviour {
 		RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10000, layerMask ))
         {
-			hit.transform.gameObject.active = false;
+			if ( selectedObject )
+				selectedObject.GetComponent<RemotePlayer>().ObjectDeselected();
+			
 			Debug.Log(hit.transform.gameObject.name);
+			selectedObject = hit.transform.gameObject;
+			selectedObject.GetComponent<RemotePlayer>().ObjectSelected();
         }
 	}	
 }

@@ -1,0 +1,7 @@
+# Assembly Files #
+###############
+*.csproj
+*.pidb
+*.unityproj
+*.sln
+Temp/*

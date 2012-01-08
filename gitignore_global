@@ -18,4 +18,5 @@ Temp
 *.pidb
 *.sln
 *.exe
+*.unityproj
 build

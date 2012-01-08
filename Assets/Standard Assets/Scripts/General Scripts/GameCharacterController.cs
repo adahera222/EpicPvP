@@ -8,6 +8,7 @@ public class GameCharacterController : MonoBehaviour {
 	public float movementSpeed = 10.0f;
 	float spinBodyBy = 0;
 	public Transform cameraTarget;
+	float camHeight = 3;
 	CharacterController controller;
 	
 	Vector3 currViewChange;
@@ -87,9 +88,13 @@ public class GameCharacterController : MonoBehaviour {
 			if ( selectedObject )
 				selectedObject.GetComponent<RemotePlayer>().ObjectDeselected();
 			
-			Debug.Log(hit.transform.gameObject.name);
 			selectedObject = hit.transform.gameObject;
 			selectedObject.GetComponent<RemotePlayer>().ObjectSelected();
         }
-	}	
+	}
+	
+	public float GetCameraHeight()
+	{
+		return camHeight;
+	}
 }

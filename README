@@ -1,8 +1,37 @@
 Tools:
-
-Unity3D
+Unity3D 3.4
 
 Current controls:
-e / d - forward / back
-s / f - strafe left / right
+w / s - forward / back
+a / d - strafe left / right
 right mouse button to look side to side
+
+
+skill 1 - f
+skill 2 - f
+skill 3 - f
+skill 4 - f
+skill 5 - f
+skill 6 - f
+
+--TBD
+switch between toolbars
+toolbar 1 - 1 (on keyboard)
+toolbar 2 - 2 (on keyboard)
+toolbar 3 - 3 (on keyboard)
+toolbar 4 - 4 (on keyboard)
+
+Git controls (if using GitBash):
+	Add a file to git:
+		git add <filename> 
+			-- The cheap way is to use "git add -A", the -A is similar to "git add .; git add -u"
+			-- "." = finds all new or modified files (does not remove any files)
+			-- "-u" = finds modified files and removed files (does not add new ones)
+	
+	to commit to your local repo:
+		git commit -m 'your message'
+
+	to push those changes to the master shared repo
+		git push origin master
+			-- origin = the name of the shared repo
+			-- master = the name of the repo on your machine

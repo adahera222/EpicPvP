@@ -17,6 +17,7 @@ public class GameCharacterController : MonoBehaviour {
 	public string characterName;
 	
 	GameObject selectedObject;
+	Transform selectedPosition;
 	
 	// First function that is called when a scene is loaded
 	void Awake()
@@ -50,7 +51,7 @@ public class GameCharacterController : MonoBehaviour {
 		
 		spinBodyBy += spinHead;
 		
-		controller.Move(movementUpdate);
+		
 		cameraTarget.Rotate(Vector3.up, spinHead, Space.World);
 		
 		
@@ -63,6 +64,11 @@ public class GameCharacterController : MonoBehaviour {
 			cameraTarget.Rotate(Vector3.up, -spinBodyBy, Space.World);
 			spinBodyBy = 0;
 		}
+	}
+	
+	void FixedUpdate()
+	{
+		controller.Move(movementUpdate);
 	}
 	
 	public void UpdateMovement(Vector3 movementDirection, Vector3 viewChange)
@@ -80,8 +86,9 @@ public class GameCharacterController : MonoBehaviour {
 		return false;
 	}
 	
-	public void SelectionRay(int layerMask, Ray ray)
+	public void SelectionRay(int layerMask, Vector3 mousePos)
 	{
+		Ray ray = Camera.mainCamera.ScreenPointToRay(mousePos);
 		RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10000, layerMask ))
         {
@@ -90,11 +97,29 @@ public class GameCharacterController : MonoBehaviour {
 			
 			selectedObject = hit.transform.gameObject;
 			selectedObject.GetComponent<RemotePlayer>().ObjectSelected();
+			
+			selectedPosition = hit.transform;
         }
+	}
+	
+	public GameObject GetSelectedObject()
+	{
+		return selectedObject;
+	}
+	
+	public Transform GetSelectedTransform()
+	{
+		return selectedPosition;
 	}
 	
 	public float GetCameraHeight()
 	{
 		return camHeight;
 	}
+	
+	public float GetSpeed()
+	{
+		return movementUpdate.magnitude;
+	}
+	
 }

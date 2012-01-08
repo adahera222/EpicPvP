@@ -8,9 +8,10 @@ var backdrop : Texture2D; // our backdrop image goes in here.
 
 var icons : Texture2D[];
 var toolBarLocation : Rect;
+//var minimapLocation : 
 private var buttonWidth : float;
 
-var timerWait : float = 0.5f;
+var timerWait : float = 0.5f; // how long to hold the mouse button down to move an ability
 private var timerHeldDown : float;
 private var heldTexture : Texture2D;
 
@@ -27,9 +28,9 @@ function OnGUI()
  	//	(Screen.width / 2040.0, Screen.height / 1152.0, 1)); 		
 		
 	// Draw the main gui skin to the screen
-	var backgroundStyle : GUIStyle = new GUIStyle();
-	backgroundStyle.normal.background = backdrop;
- 	GUI.Label( Rect( 0, Screen.height - 250, Screen.width, 250), "", backgroundStyle);
+	//var backgroundStyle : GUIStyle = new GUIStyle();
+	//backgroundStyle.normal.background = backdrop;
+ 	//GUI.Label( Rect( 0, Screen.height - 250, Screen.width, 250), "", backgroundStyle);
  	
  	// Check for web play (we would never want to attempt to close a browser
  	/*
@@ -71,7 +72,7 @@ function OnGUI()
 function Update () {
 	
 	var buttonId : int;
-	var selectedVal = Input.GetAxisRaw("Fire1");
+	var selectedVal = Input.GetAxisRaw("Cast");
 	if (selectedVal != 0)
 	{				
 		var finallocation : Rect;

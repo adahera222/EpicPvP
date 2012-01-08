@@ -23,9 +23,9 @@ public class ActionDispatcher : MonoBehaviour {
 		controller.UpdateMovement(movementDirection, viewChange);
 	}
 	
-	public void SelectionRay(GameObject character, int layerMask, Ray ray)
+	public void SelectionRay(GameObject character, int layerMask, Vector3 mousePos)
 	{
 		GameCharacterController controller = character.GetComponent<GameCharacterController>();
-		controller.SelectionRay(layerMask, ray);
+		controller.SelectionRay(layerMask, mousePos);
 	}
 }

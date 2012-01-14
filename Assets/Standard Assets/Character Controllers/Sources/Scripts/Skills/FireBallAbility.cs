@@ -7,7 +7,7 @@ public class FireBallAbility : BaseAbility {
 	GameObject fireballPrefab;
 	
 	// Use this for initialization
-	public override void Initialize (AbiliitesCollection coll, GameCharacterController cont) {		
+	public override void Initialize (AbilitesCollection coll, GameCharacterController cont) {		
 		base.Initialize(coll, cont);
 		
 		castTime = 1.0f;		
@@ -21,7 +21,7 @@ public class FireBallAbility : BaseAbility {
 		coolingdown = false;
 		
 		fireballPrefab = (GameObject)Resources.Load(projectPath);
-		//image = fireballPrefab.GetComponent<>();
+		image = (Texture2D)Resources.Load("Textures/Icons/class/warlock_icon");
 	}
 	
 	// the actual cast of the ability
@@ -36,7 +36,9 @@ public class FireBallAbility : BaseAbility {
 		startPos += controller.transform.forward*2.0f;
 		
 		GameObject projectile = (GameObject)Instantiate(fireballPrefab, startPos, controller.transform.rotation);
+		
 		projectile.GetComponent<FireballController>().Initialize();
+		projectile.GetComponent<FireballController>().SetTarget(controller.GetSelectedObject());
 		return result;
 	}	
 }

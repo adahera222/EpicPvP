@@ -9,7 +9,7 @@ public class BaseAbility : ScriptableObject {
 	
 	protected bool stopMovement = true; // if casting does it stop movement
 	protected bool readied = true;
-	protected AbiliitesCollection collection;
+	protected AbilitesCollection collection;
 	protected GameCharacterController controller;
 	
 	public float skill = 10.0f; // a value of 1-10 to aid different aspects for how powerful this spell is
@@ -26,7 +26,7 @@ public class BaseAbility : ScriptableObject {
 	
 	public Texture2D image;	// the image that represents this ability
 	
-	public virtual void Initialize(AbiliitesCollection coll, GameCharacterController cont)
+	public virtual void Initialize(AbilitesCollection coll, GameCharacterController cont)
 	{
 		collection = coll;
 		controller = cont;
@@ -85,5 +85,5 @@ public class BaseAbility : ScriptableObject {
 		
 		readied = false;
 		return true;
-	}
+	}	
 }

@@ -17,6 +17,13 @@ private var heldTexture : Texture2D;
 
 var heldTextureCenter : Vector2;
 
+var hostPlayer : GameObject;
+
+function Start()
+{
+	//GetAbilities();
+}
+
 function OnGUI()
 {
 	if (gSkin)
@@ -66,7 +73,7 @@ function OnGUI()
 			heldTexture.height );
 			
   		GUI.Box(textureRect, heldTexture);
-	}
+	}	
 }
 
 function Update () {
@@ -119,5 +126,11 @@ function Update () {
 		var clearTexture : Texture2D;
 		icons[buttonId] = clearTexture;
 	}
+}
+
+function GetAbilities()
+{	
+	var collection : AbilitesCollection = hostPlayer.GetComponent("AbilitesCollection");
+	collection.FillAbilityBar(icons);
 }
 

@@ -4,7 +4,7 @@ using System.Collections;
 public class FireballController : MonoBehaviour {
 		
 	float lifeSpawn = 10.0f;
-	float damage = 3.0f;
+	Vector3 target;
 	
 	// Use this for initialization
 	void Start () {
@@ -15,8 +15,10 @@ public class FireballController : MonoBehaviour {
 	}
 	
 	void FixedUpdate()
-	{		
-		transform.Translate(transform.forward * 20.0f * Time.fixedDeltaTime, Space.World);
+	{
+		Vector3 moveDirection = target - transform.position;
+		moveDirection.Normalize();
+		transform.Translate(moveDirection * 20.0f * Time.fixedDeltaTime, Space.World);
 		lifeSpawn -= Time.fixedDeltaTime;
 		if (lifeSpawn <= 0.0f)
 		{
@@ -27,6 +29,7 @@ public class FireballController : MonoBehaviour {
 	
 	public void Initialize()
 	{
+		
 	}
 	
 	void OnCollisionEnter(Collision collision)
@@ -48,4 +51,10 @@ public class FireballController : MonoBehaviour {
 		// kill this object
 		Destroy(gameObject);
 	}
+	
+	public virtual void SetTarget(GameObject proj_target)
+	{
+		target = proj_target.transform.position;
+		target.y += 0.7f;
+	}	
 }

@@ -5,7 +5,8 @@ public class InputGrabber : MonoBehaviour {
 	ActionDispatcher actionDispatcher;
 	
 	EffectsCollection effects;
-	AbiliitesCollection abilities;
+	AbilitesCollection abilities;
+	AbilityController abilityControler;
 	
 	Vector3 lastScreenPos;
 	
@@ -14,7 +15,8 @@ public class InputGrabber : MonoBehaviour {
 		actionDispatcher = GameObject.Find("Level").GetComponent<ActionDispatcher>();
 		
 		effects = GetComponent<EffectsCollection>();
-		abilities = GetComponent<AbiliitesCollection>();
+		abilities = GetComponent<AbilitesCollection>();
+		abilityControler = GetComponent<AbilityController>();
 	}
 	
 	// Update is called once per frame
@@ -54,13 +56,7 @@ public class InputGrabber : MonoBehaviour {
 		if (Input.GetButton("Skill6"))
 			skillPressed = 5;
 		
-		if (abilities)
-		{
-			if (skillPressed != -1)
-				abilities.StartAbility(skillPressed);
-			if (selectorPos.x != -1)
-				abilities.UseAbility();
-		}
+		abilityControler.StartAbility(skillPressed);
 		
 		if (effects)
 		{
@@ -80,5 +76,15 @@ public class InputGrabber : MonoBehaviour {
 		// This will get the mask to collide against			
 		int layerMask = 1 << LayerMask.NameToLayer("otherPlayers");		
 		actionDispatcher.SelectionRay(gameObject, layerMask, selectorPos);
+		
+		if (abilities)
+		{
+			if (selectorPos.x != -1)
+				abilities.UseAbility();
+		}		
+	}
+	
+	void OnGUI()
+	{
 	}
 }

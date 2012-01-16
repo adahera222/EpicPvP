@@ -58,10 +58,10 @@ function OnGUI()
   	finallocation.height = toolBarLocation.height * Screen.height;
   	buttonWidth = finallocation.width / icons.length;
   	
-	GUI.Toolbar(finallocation, -1, icons);
+	//GUI.Toolbar(finallocation, -1, icons);
 	
 	// show the icon moving the new spot
-	if (heldTexture)
+	if (false && heldTexture)
 	{
 		heldTextureCenter.x = Input.mousePosition.x;
 		heldTextureCenter.y = Screen.height - Input.mousePosition.y;
@@ -130,7 +130,7 @@ function Update () {
 
 function GetAbilities()
 {	
-	var collection : AbilitesCollection = hostPlayer.GetComponent("AbilitesCollection");
-	collection.FillAbilityBar(icons);
+	//var collection : AbilitesCollection = hostPlayer.GetComponent("AbilitesCollection");
+	//collection.FillAbilityBar(icons);
 }
 

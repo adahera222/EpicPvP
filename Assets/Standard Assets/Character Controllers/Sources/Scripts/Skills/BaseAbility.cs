@@ -26,10 +26,17 @@ public class BaseAbility : ScriptableObject {
 	
 	public Texture2D image;	// the image that represents this ability
 	
+	protected int abilityID;
+	public int ID
+	{
+		get { return abilityID; }
+	}
+	
 	public virtual void Initialize(AbilitesCollection coll, GameCharacterController cont)
 	{
 		collection = coll;
 		controller = cont;
+		abilityID = -1;
 	}
 	
 	public void FixedUpdate()

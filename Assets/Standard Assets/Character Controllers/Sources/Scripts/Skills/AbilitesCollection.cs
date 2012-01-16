@@ -1,36 +1,36 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AbilitesCollection : MonoBehaviour {
-
-	int toolbarID = 0; // which of the four tool bars are active
 	bool casting = false;  // are we in the middle of casting
 	
 	float globalCoolDownTimer = 0.0f;
 	bool globalActive = false;
 	
-	BaseAbility[,] abilities;
+	Dictionary<int, BaseAbility> abilities = new Dictionary<int, BaseAbility>();
 	BaseAbility readiedAbility;
 	BaseAbility castingAbility;
 	
+	void Awake()
+	{		
+		GameCharacterController gcc = GetComponent<GameCharacterController>();
+		
+		BaseAbility ab = (BaseAbility)ScriptableObject.CreateInstance("FireBallAbility");
+		ab.Initialize(this, gcc);
+		abilities.Add(ab.ID, ab);
+	}
+	
 	// Use this for initialization
 	void Start () {
-		toolbarID = 0;
-		
-		abilities = new BaseAbility[1,1];
-		abilities[0,0] = (BaseAbility)ScriptableObject.CreateInstance("FireBallAbility");
-		foreach (BaseAbility ability in abilities)
-		{
-			ability.Initialize(this, GetComponent<GameCharacterController>());
-		}
 	}
 	
 	void FixedUpdate()
 	{
-		foreach (BaseAbility ability in abilities)
+		foreach (KeyValuePair<int, BaseAbility> ability in abilities)
 		{
-			ability.FixedUpdate();
-		}		
+			ability.Value.FixedUpdate();
+		}
 	}
 	
 	// Update is called once per frame
@@ -48,13 +48,14 @@ public class AbilitesCollection : MonoBehaviour {
 	}
 	
 	// attempts to start an ability
-	public void StartAbility(int toolbaroffset)
+	public void StartAbility(int abilityID)
 	{
-		if (casting || globalActive || toolbaroffset < 0 || toolbaroffset > 5)
+		if (casting || globalActive || abilityID < 0 )
 			return;
 		
-		castingAbility = abilities[toolbarID, 0];
+		castingAbility = abilities[abilityID];
 		castingAbility.StartAbility();
+		SendMessage("OnCastSpell", castingAbility.castTime);
 	}
 	
 	public void UseAbility()
@@ -91,10 +92,14 @@ public class AbilitesCollection : MonoBehaviour {
 		
 	}
 	
-	public void FillAbilityBar(Texture2D[] abilityImages)
+	public void FillAbilityBar(Texture2D[] abilityImages, int[] ids)
 	{
 		int counter = 0;
-		foreach (BaseAbility ability in abilities)
-			abilityImages[counter++] = ability.image;
+		foreach (int id in ids)
+		{
+			if (id != -1)
+				abilityImages[counter] = abilities[id].image;
+			counter++;
+		}
 	}
 }

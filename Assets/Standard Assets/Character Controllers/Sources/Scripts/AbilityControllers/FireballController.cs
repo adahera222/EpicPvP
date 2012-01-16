@@ -54,7 +54,14 @@ public class FireballController : MonoBehaviour {
 	
 	public virtual void SetTarget(GameObject proj_target)
 	{
-		target = proj_target.transform.position;
-		target.y += 0.7f;
+		if (proj_target.transform.position != Vector3.zero)
+		{
+			target = proj_target.transform.position;
+			target.y += 0.7f;
+		}
+		else
+		{
+			
+		}
 	}	
 }

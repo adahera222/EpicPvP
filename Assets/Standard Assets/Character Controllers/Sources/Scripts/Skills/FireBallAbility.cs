@@ -22,6 +22,8 @@ public class FireBallAbility : BaseAbility {
 		
 		fireballPrefab = (GameObject)Resources.Load(projectPath);
 		image = (Texture2D)Resources.Load("Textures/Icons/class/warlock_icon");
+		
+		abilityID = 100;
 	}
 	
 	// the actual cast of the ability

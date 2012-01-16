@@ -102,17 +102,18 @@ public class InputGrabber : MonoBehaviour {
 		if (Input.GetButton("Skill6"))
 			toolbarbutton = 5;
 		
-		int skillPressed = -1;
 		if (toolbarbutton != -1 || clickedToolbarbutton != -1)
 		{
+			int skillPressed = -1;
 			if (toolbarbutton != -1)
 				skillPressed = abilityIDs[toolbarbutton];
 
 			if (clickedToolbarbutton != -1)
 				skillPressed = abilityIDs[clickedToolbarbutton];
+			
+			abilityControler.StartAbility(skillPressed);		
 		}
 		
-		abilityControler.StartAbility(skillPressed);		
 		
 		if (effects)
 		{

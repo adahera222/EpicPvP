@@ -54,8 +54,8 @@ public class AbilitesCollection : MonoBehaviour {
 			return;
 		
 		castingAbility = abilities[abilityID];
-		castingAbility.StartAbility();
-		SendMessage("OnCastSpell", castingAbility.castTime);
+		if (castingAbility.StartAbility())
+			SendMessage("OnCastSpell", castingAbility.castTime);
 	}
 	
 	public void UseAbility()

@@ -48,14 +48,18 @@ public class AbilitesCollection : MonoBehaviour {
 	}
 	
 	// attempts to start an ability
-	public void StartAbility(int abilityID)
+	public bool StartAbility(int abilityID)
 	{
 		if (casting || globalActive || abilityID < 0 )
-			return;
+			return false;
 		
 		castingAbility = abilities[abilityID];
 		if (castingAbility.StartAbility())
+		{
 			SendMessage("OnCastSpell", castingAbility.castTime);
+			return true;
+		}
+		return false;
 	}
 	
 	public void UseAbility()

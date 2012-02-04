@@ -16,9 +16,6 @@ public class FireBallAbility : BaseAbility {
 		resourceCost = 10.0f;
 		globalCoolDown = 0.5f;
 		relatedAbilityCoolDown = 0.6f;
-		coolDownTimer = 1.0f;
-		coolDownRemainder = 0.0f;
-		coolingdown = false;
 		
 		fireballPrefab = (GameObject)Resources.Load(projectPath);
 		image = (Texture2D)Resources.Load("Textures/Icons/class/warlock_icon");
@@ -40,7 +37,7 @@ public class FireBallAbility : BaseAbility {
 		GameObject projectile = (GameObject)Instantiate(fireballPrefab, startPos, controller.transform.rotation);
 		
 		projectile.GetComponent<FireballController>().Initialize();
-		projectile.GetComponent<FireballController>().SetTarget(controller.GetSelectedObject());
+		projectile.GetComponent<FireballController>().SetTarget(controller.GetSelectedPoint());
 		return result;
 	}	
 }

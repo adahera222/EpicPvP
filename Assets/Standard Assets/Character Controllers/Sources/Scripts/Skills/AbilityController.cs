@@ -16,8 +16,8 @@ public class AbilityController : MonoBehaviour {
 	
 	}
 	
-	public void StartAbility(int id)
+	public bool StartAbility(int id)
 	{
-		collection.StartAbility(id);
+		return collection.StartAbility(id);
 	}
 }

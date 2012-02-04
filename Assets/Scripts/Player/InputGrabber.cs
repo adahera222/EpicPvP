@@ -8,9 +8,16 @@ public class InputGrabber : MonoBehaviour {
 	AbilitesCollection abilities;
 	AbilityController abilityControler;
 	
+	new public Camera camera;
+	public float cameraViewScalar = 1.0f;
+	
 	Vector3 lastScreenPos;
 	
+	public Texture2D disabledButton;
 	public Texture2D[] icons;
+	Texture2D[] currentIcons;
+	public float disabledTimerMax = 0.5f;
+	float currentDisableTimer;
 	private int[] abilityIDs;
 	public Rect toolBarLocation;
 	
@@ -29,6 +36,7 @@ public class InputGrabber : MonoBehaviour {
 		abilityControler = GetComponent<AbilityController>();
 				
 		icons = new Texture2D[6];
+		currentIcons = new Texture2D[6];
 		
 		int[] indicies = {0,1,2,3,4,5};
 		abilityIDs = new int[6];
@@ -38,7 +46,13 @@ public class InputGrabber : MonoBehaviour {
 		abilityIDs[3] = 100;
 		abilities.FillAbilityBar(icons, abilityIDs);
 		
+		for (int idx=0; idx<6; ++idx)
+		if (icons[idx])
+			currentIcons[idx] = icons[idx];
+		
 		castingBarObject = (CastingBarScript)Instantiate(castingBarPrefab);
+		
+		currentDisableTimer = 0.0f;
 		
 		/*
 		Texture2D tex2d = (Texture2D)Resources.Load("Textures/Icons/class/warlock_icon");		
@@ -52,7 +66,19 @@ public class InputGrabber : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update () {
+		// update disabled ability timer so that the user can start to use their stuff as soon as possible
+		if (currentDisableTimer != 0.0f)
+		{
+			currentDisableTimer += Time.deltaTime;
+			if (currentDisableTimer >= disabledTimerMax)
+			{
+				currentDisableTimer = 0.0f;
+				for (int idx=0; idx<6; ++idx)
+					currentIcons[idx] = icons[idx];
+			}
+		}
+		
 		Rect finallocation = new Rect();
   		finallocation.x = toolBarLocation.x * Screen.width;
   		finallocation.width = toolBarLocation.width * Screen.width;
@@ -79,7 +105,10 @@ public class InputGrabber : MonoBehaviour {
 		//	cycle of when it was actually pressed and won't return true untill it is pressed again.
 		Vector3 viewChange = Vector3.zero;
 		if (Input.GetAxisRaw("LookAtPoint") != 0 && !mouseOverGUI)
+		{
 			viewChange = Input.mousePosition - lastScreenPos;
+			camera.SendMessage("AdjustHeight", -viewChange.y * cameraViewScalar);
+		}
 		lastScreenPos = Input.mousePosition;
 		
 		// this is a left click of the mouse and is used for selecting/targeting
@@ -87,6 +116,14 @@ public class InputGrabber : MonoBehaviour {
 		{
 			selectorPos = Input.mousePosition;
 		}
+		
+		if (Input.GetButton("Cancel") && !mouseOverGUI)
+		{
+		
+		}
+		
+		float zoomVal = Input.GetAxis("Mouse ScrollWheel");
+		camera.SendMessage("AdjustDistance", zoomVal);
 		
 		toolbarbutton = -1;
 		if (Input.GetButton("Skill1"))
@@ -111,7 +148,12 @@ public class InputGrabber : MonoBehaviour {
 			if (clickedToolbarbutton != -1)
 				skillPressed = abilityIDs[clickedToolbarbutton];
 			
-			abilityControler.StartAbility(skillPressed);		
+			if (abilityControler.StartAbility(skillPressed))
+			{
+				currentDisableTimer = Time.deltaTime;
+				for (int idx=0; idx<6; ++idx)
+					currentIcons[idx] = disabledButton;
+			}				
 		}
 		
 		
@@ -151,7 +193,7 @@ public class InputGrabber : MonoBehaviour {
 	  	finallocation.height = toolBarLocation.height * Screen.height;
 	  	
 		clickedToolbarbutton = -1;
-		clickedToolbarbutton = GUI.Toolbar(finallocation, toolbarbutton, icons);
+		clickedToolbarbutton = GUI.Toolbar(finallocation, toolbarbutton, currentIcons);
 	}
 	
 	// Casts a spell for the giving time

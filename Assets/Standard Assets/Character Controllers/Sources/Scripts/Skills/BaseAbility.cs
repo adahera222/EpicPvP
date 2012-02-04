@@ -20,10 +20,6 @@ public class BaseAbility : ScriptableObject {
 	public float globalCoolDown = 0.5f;
 	public float relatedAbilityCoolDown = 0.6f;	// how long untill can use an ability of a simialr type
 	
-	public float coolDownTimer = 1.0f;	// how long to reuse this ability
-	protected float coolDownRemainder = 0.0f;
-	protected bool coolingdown = false;
-	
 	public Texture2D image;	// the image that represents this ability
 	
 	protected int abilityID;
@@ -47,13 +43,6 @@ public class BaseAbility : ScriptableObject {
 			if (currCastingTime <= 0.0f)
 				FinishedCasting();
 		}
-		
-		if (coolingdown)
-		{
-			coolDownRemainder -= Time.deltaTime;
-			if (coolDownRemainder <= 0.0f)
-				coolingdown = false;
-		}
 	}
 	
 	public virtual void FinishedCasting()
@@ -62,16 +51,11 @@ public class BaseAbility : ScriptableObject {
 		casting = false;
 		readied = true;
 		
-		coolingdown = true;
-		coolDownRemainder = coolDownTimer;
-		
 		collection.AbilityFinished(this);
 	}
 	
 	public virtual bool StartAbility()
 	{
-		if (coolingdown)
-			return false;
 		collection.AbilityStarted(globalCoolDown);
 		
 		casting = true;

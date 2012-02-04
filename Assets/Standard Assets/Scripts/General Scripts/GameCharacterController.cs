@@ -5,10 +5,14 @@ using System.Collections;
 public class GameCharacterController : MonoBehaviour {	
 	
 	public float headRotateSpeed = 10.0f;
+	public float lookatspeed = 10.0f;
 	public float movementSpeed = 10.0f;
+	float movedAmout = 0.0f;
+	
 	float spinBodyBy = 0;
+	
 	public Transform cameraTarget;
-	float camHeight = 3;
+	
 	CharacterController controller;
 	
 	Vector3 currViewChange;
@@ -18,6 +22,7 @@ public class GameCharacterController : MonoBehaviour {
 	
 	GameObject selectedObject;
 	Transform selectedPosition;
+	Vector3 selectedPoint;
 	
 	// First function that is called when a scene is loaded
 	void Awake()
@@ -32,7 +37,7 @@ public class GameCharacterController : MonoBehaviour {
 		spinBodyBy = 0;
 	
 		TextMesh mesh = transform.Find("DisplayStats/ObjectsName").GetComponent<TextMesh>();
-		mesh.text = characterName;		
+		mesh.text = characterName;
 	}
 	
 	// Update is called once per frame
@@ -40,6 +45,7 @@ public class GameCharacterController : MonoBehaviour {
 	
 	}
 	
+	// Do the updates here so that way animations can be tempered with.
 	void LateUpdate()
 	{
 		// twist the head around
@@ -51,10 +57,6 @@ public class GameCharacterController : MonoBehaviour {
 		
 		spinBodyBy += spinHead;
 		
-		
-		cameraTarget.Rotate(Vector3.up, spinHead, Space.World);
-		
-		
 		// move to face the direction
 		if (movementUpdate.x != 0.0f || movementUpdate.z != 0.0f)
 		{
@@ -64,17 +66,29 @@ public class GameCharacterController : MonoBehaviour {
 			cameraTarget.Rotate(Vector3.up, -spinBodyBy, Space.World);
 			spinBodyBy = 0;
 		}
+		
+		float updown = currViewChange.y * lookatspeed * Time.deltaTime;
+		cameraTarget.Rotate(Vector3.right, -updown);
+		cameraTarget.Rotate(Vector3.up, spinHead, Space.World);
 	}
 	
 	void FixedUpdate()
-	{
+	{	
+		// project movement onto a xz plane to detect if we are running or not.
+		Vector3 cross = Vector3.Cross(movementUpdate, Vector3.up);
+		Vector3 projected = Vector3.Cross(Vector3.up, cross);
+		if (projected.magnitude != 0.0f)
+			animation.Play("run");
+		else
+			animation.Play("idle");
+				
 		controller.Move(movementUpdate);
 	}
 	
 	public void UpdateMovement(Vector3 movementDirection, Vector3 viewChange)
 	{
+		movedAmout = (movementDirection * Time.deltaTime).magnitude;
 		currViewChange = viewChange;
-		
 		movementDirection *= movementSpeed;
 		movementDirection.y -= 20.0f; // gravity
 		movementDirection *= Time.deltaTime;		
@@ -88,6 +102,7 @@ public class GameCharacterController : MonoBehaviour {
 	
 	public void SelectionRay(int layerMask, Vector3 mousePos)
 	{
+		selectedObject = null;
 		Ray ray = Camera.mainCamera.ScreenPointToRay(mousePos);
 		RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10000, layerMask ))
@@ -99,7 +114,12 @@ public class GameCharacterController : MonoBehaviour {
 			selectedObject.GetComponent<RemotePlayer>().ObjectSelected();
 			
 			selectedPosition = hit.transform;
-        }
+		}
+		
+        if (Physics.Raycast(ray, out hit, 10000))
+        {			
+			selectedPoint = hit.point;
+        }		
 	}
 	
 	public GameObject GetSelectedObject()
@@ -112,10 +132,10 @@ public class GameCharacterController : MonoBehaviour {
 		return selectedPosition;
 	}
 	
-	public float GetCameraHeight()
+	public Vector3 GetSelectedPoint	()
 	{
-		return camHeight;
-	}
+		return selectedPoint;
+	}	
 	
 	public float GetSpeed()
 	{

@@ -2,9 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class FireballController : MonoBehaviour {
-		
-	float lifeSpawn = 10.0f;
-	Vector3 target;
+	
+	public float speed = 20.0f;
+	public float lifeSpawn = 10.0f;
+	
+	Vector3 moveDirection;
 	
 	// Use this for initialization
 	void Start () {
@@ -16,9 +18,7 @@ public class FireballController : MonoBehaviour {
 	
 	void FixedUpdate()
 	{
-		Vector3 moveDirection = target - transform.position;
-		moveDirection.Normalize();
-		transform.Translate(moveDirection * 20.0f * Time.fixedDeltaTime, Space.World);
+		transform.Translate(moveDirection * speed * Time.fixedDeltaTime, Space.World);
 		lifeSpawn -= Time.fixedDeltaTime;
 		if (lifeSpawn <= 0.0f)
 		{
@@ -52,16 +52,9 @@ public class FireballController : MonoBehaviour {
 		Destroy(gameObject);
 	}
 	
-	public virtual void SetTarget(GameObject proj_target)
+	public virtual void SetTarget(Vector3 point)
 	{
-		if (proj_target.transform.position != Vector3.zero)
-		{
-			target = proj_target.transform.position;
-			target.y += 0.7f;
-		}
-		else
-		{
-			
-		}
+		moveDirection = point - transform.position;
+		moveDirection.Normalize();		
 	}	
 }

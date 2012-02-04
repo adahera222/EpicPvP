@@ -19,7 +19,7 @@ public class CastingBarScript : MonoBehaviour {
 	private float castingTime = 0.0f;
 	private float currCastTime = 0.0f;
 	
-	private float fadeOutTime = 1.0f;
+	public float fadeOutTime = 0.5f;
 	private float currFadeOut = 0.0f;
 	
 	private float imageWidth;

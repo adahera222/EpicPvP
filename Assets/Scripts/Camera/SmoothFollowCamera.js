@@ -36,12 +36,12 @@ private var targetHeight = 100000.0;
 
 function Awake ()
 {
+	/*
 	if (target)
 	{
-		//controller = target.GetComponent(ThirdPersonController);
+		controller = target.GetComponent(ThirdPersonController);
 	}
 	
-	/*
 	if (controller)
 	{
 		var characterController : CharacterController = target.collider;
@@ -194,6 +194,11 @@ function SetUpRotation (centerPos : Vector3, headPos : Vector3)
 function GetCenterOffset ()
 {
 	return centerOffset;
+}
+
+function AdjustHeight(adjustHeight : float)
+{
+	height += adjustHeight;
 }
 
 @script AddComponentMenu ("Third Person Camera/Smooth Follow Camera")

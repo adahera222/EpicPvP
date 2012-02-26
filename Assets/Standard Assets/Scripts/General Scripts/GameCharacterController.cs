@@ -7,7 +7,6 @@ public class GameCharacterController : MonoBehaviour {
 	public float headRotateSpeed = 10.0f;
 	public float lookatspeed = 10.0f;
 	public float movementSpeed = 10.0f;
-	float movedAmout = 0.0f;
 	
 	float spinBodyBy = 0;
 	
@@ -87,7 +86,6 @@ public class GameCharacterController : MonoBehaviour {
 	
 	public void UpdateMovement(Vector3 movementDirection, Vector3 viewChange)
 	{
-		movedAmout = (movementDirection * Time.deltaTime).magnitude;
 		currViewChange = viewChange;
 		movementDirection *= movementSpeed;
 		movementDirection.y -= 20.0f; // gravity

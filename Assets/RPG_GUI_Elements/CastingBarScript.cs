@@ -16,8 +16,7 @@ public class CastingBarScript : MonoBehaviour {
 	public Texture2D overlayImage;
 	private GameObject overlayObject;	
 	
-	private float castingTime = 0.0f;
-	private float currCastTime = 0.0f;
+	private float precentage = 0.0f;
 	
 	public float fadeOutTime = 0.5f;
 	private float currFadeOut = 0.0f;
@@ -29,9 +28,18 @@ public class CastingBarScript : MonoBehaviour {
 	private float finalLocX = 0;
 	private float finalLocY = 0;
 		
-	public void Display(float time){
-		currCastTime = 0.0f;
-		castingTime = time;
+	
+	public void StartDisplay(float percent) {
+		Display(percent);
+		
+	}
+	
+	public void UpdateDisplay(float percent) {
+		precentage = percent;
+	}
+	
+	public void Display(float percent){
+		precentage = percent;
 		phase = CastingPhase.CASTING;
 		
 		Color color = backgroundObject.guiTexture.color;
@@ -99,15 +107,8 @@ public class CastingBarScript : MonoBehaviour {
 		case CastingPhase.NONE:
 			break;
 		
-		case CastingPhase.CASTING:
-			currCastTime += Time.deltaTime;
-			float widthscalar = currCastTime / castingTime;
-			if (widthscalar > 1.0f) {
-				widthscalar = 1.0f;
-				phase = CastingPhase.FINISHED_CASTING;
-			}
-			
-			updateTexture.pixelInset = new Rect(finalLocX, finalLocY, imageWidth * widthscalar, imageHeight);
+		case CastingPhase.CASTING:			
+			updateTexture.pixelInset = new Rect(finalLocX, finalLocY, imageWidth * precentage, imageHeight);
 			break;
 		
 		case CastingPhase.FINISHED_CASTING:
@@ -152,9 +153,14 @@ public class CastingBarScript : MonoBehaviour {
 		}
 	}
 	
-	void Interrupted()
+	public void Interrupted()
 	{
 		phase = CastingPhase.FADEOUT;
+	}
+	
+	public void Finished()
+	{
+		phase = CastingPhase.FINISHED_CASTING;
 	}
 }
 		

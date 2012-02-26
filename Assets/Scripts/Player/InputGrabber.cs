@@ -6,7 +6,8 @@ public class InputGrabber : MonoBehaviour {
 	
 	EffectsCollection effects;
 	AbilitesCollection abilities;
-	AbilityController abilityControler;
+	
+	public Ability testAbility;
 	
 	new public Camera camera;
 	public float cameraViewScalar = 1.0f;
@@ -33,7 +34,6 @@ public class InputGrabber : MonoBehaviour {
 		
 		effects = GetComponent<EffectsCollection>();
 		abilities = GetComponent<AbilitesCollection>();
-		abilityControler = GetComponent<AbilityController>();
 				
 		icons = new Texture2D[6];
 		currentIcons = new Texture2D[6];
@@ -63,6 +63,9 @@ public class InputGrabber : MonoBehaviour {
 		tgt.transform.position = Vector3.zero;
 		tgt.pixelInset = new Rect(10,10,30,30);
 		*/
+		
+		testAbility = (Ability)ScriptableObject.CreateInstance("Ability");
+		testAbility.TestInitialize(1, castingBarPrefab);
 	}
 	
 	// Update is called once per frame
@@ -148,7 +151,7 @@ public class InputGrabber : MonoBehaviour {
 			if (clickedToolbarbutton != -1)
 				skillPressed = abilityIDs[clickedToolbarbutton];
 			
-			if (abilityControler.StartAbility(skillPressed))
+			if (abilities.StartAbility(skillPressed))
 			{
 				currentDisableTimer = Time.deltaTime;
 				for (int idx=0; idx<6; ++idx)
@@ -156,6 +159,10 @@ public class InputGrabber : MonoBehaviour {
 			}				
 		}
 		
+		if (toolbarbutton == 0 || clickedToolbarbutton == 0)
+		{
+			testAbility.Start();
+		}		
 		
 		if (effects)
 		{
@@ -163,7 +170,10 @@ public class InputGrabber : MonoBehaviour {
 		
 		Vector3 updatedMove;
 		abilities.ConfirmMovement(moveDirection, out updatedMove);
-		moveDirection = updatedMove;		
+		moveDirection = updatedMove;
+		
+		if (testAbility.StopsMovement())
+			moveDirection = Vector3.zero;
 		
 		// now that everything is done, make the character do stuff
 		actionDispatcher.UpdateMovement(
@@ -180,7 +190,11 @@ public class InputGrabber : MonoBehaviour {
 		{
 			if (selectorPos.x != -1)
 				abilities.UseAbility();
-		}		
+		}
+		
+		testAbility.Update();
+		if (selectorPos.x != -1)
+			testAbility.UseAbility();
 	}
 	
 	void OnGUI()
@@ -199,7 +213,7 @@ public class InputGrabber : MonoBehaviour {
 	// Casts a spell for the giving time
 	void OnCastSpell(float castTime)
 	{
-		castingBarObject.Display(castTime);
+		//castingBarObject.Display(castTime);
 	}
 	
 	// channels a spell for the maximum amount of time
